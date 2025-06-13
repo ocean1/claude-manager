@@ -228,6 +228,11 @@ class ClaudeConfigManager:
             # Copy backup to config location
             shutil.copy2(backup_path, self.config_path)
 
+            # Verify the copy worked
+            if not self.config_path.exists():
+                logger.error("Failed to copy backup to config location")
+                return False
+
             # Reload the configuration
             return self.load_config()
 
