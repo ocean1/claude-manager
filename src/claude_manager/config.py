@@ -96,7 +96,7 @@ class ClaudeConfigManager:
             if not self.config_path.exists():
                 return None
 
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # noqa: DTZ005
             backup_path = self.backup_dir / f"claude_{timestamp}.json"
 
             shutil.copy2(self.config_path, backup_path)

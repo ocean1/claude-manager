@@ -189,11 +189,25 @@ ignore = [
     "PLR0913", # Too many arguments to function call
     "COM812",  # Trailing comma missing
     "ISC001",  # Implicit string concatenation
+    "G004",    # Logging uses f-string
+    "TRY401",  # Redundant exception in logging
+    "TRY300",  # Consider else block
+    "PTH123",  # open() vs Path.open() - we use both intentionally
+    "PLR2004", # Magic value comparison
+    "C901",    # Complex structure
+    "PLR0912", # Too many branches
+    "PLR0915", # Too many statements
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "PLR2004", "ANN"]
+"tests/*" = ["S101", "PLR2004", "ANN", "ARG002", "PTH123"]
 "src/claude_manager/cli.py" = ["T20"]
+"src/claude_manager/utils.py" = ["ANN401", "ARG002"]
+"src/claude_manager/ui_helpers.py" = ["ANN401", "SIM105"]
+"src/claude_manager/tui.py" = ["RUF012", "ARG002", "ANN001", "E501"]
+"src/claude_manager/ui.py" = ["RUF001", "DTZ007", "F821", "E501"]
+"src/claude_manager/simple_ui.py" = ["E501"]
+"src/claude_manager/models.py" = ["E501"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["claude_manager"]

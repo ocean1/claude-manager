@@ -96,6 +96,9 @@ def main(config_path: Path | None, no_backup: bool, debug: bool) -> None:  # noq
             # Run TUI
             run_tui(config_manager)
 
+        except KeyboardInterrupt:
+            console.print("\n[yellow]Interrupted by user[/yellow]")
+            sys.exit(0)
         except Exception as e:
             console.print(f"\n[red]Error: {e}[/red]")
             if debug:
