@@ -136,12 +136,16 @@ class TestIntegration:
 
     def test_backup_rotation(self, config_manager: ClaudeConfigManager) -> None:
         """Test backup rotation functionality."""
+        import time
+
         # Create many backups
         backup_paths = []
         for _i in range(15):
             backup = config_manager.create_backup()
             if backup:
                 backup_paths.append(backup)
+            # Small delay to ensure unique timestamps on Windows
+            time.sleep(0.001)
 
         # Check that old backups were cleaned
         existing_backups = list(config_manager.backup_dir.glob("claude_*.json"))
