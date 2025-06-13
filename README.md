@@ -7,6 +7,8 @@
 
 A Python terminal UI application for managing Claude Code projects and configurations stored in `.claude.json`.
 
+![Preview](preview.png)
+
 ## Features
 
 ### Project Management
