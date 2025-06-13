@@ -93,9 +93,12 @@ def temp_config_file(sample_config_data: dict[str, Any]) -> Generator[Path, None
 
 
 @pytest.fixture
-def config_manager(temp_config_file: Path) -> ClaudeConfigManager:
-    """Create a configured ClaudeConfigManager instance."""
+def config_manager(temp_config_file: Path, tmp_path: Path) -> ClaudeConfigManager:
+    """Create a configured ClaudeConfigManager instance with isolated backup directory."""
     manager = ClaudeConfigManager(str(temp_config_file))
+    # Override the backup directory to use a temporary one
+    manager.backup_dir = tmp_path / ".claude_backups"
+    manager.backup_dir.mkdir(exist_ok=True)
     manager.load_config()
     return manager
 
@@ -123,3 +126,24 @@ def mock_home_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     home.mkdir()
     monkeypatch.setattr(Path, "home", lambda: home)
     return home
+
+
+@pytest.fixture
+def isolated_config_manager(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, sample_config_data: dict[str, Any]
+) -> ClaudeConfigManager:
+    """Create a fully isolated ClaudeConfigManager for tests that create their own configs."""
+    # Mock home directory
+    home = tmp_path / "home"
+    home.mkdir()
+    monkeypatch.setattr(Path, "home", lambda: home)
+
+    # Create config file
+    config_path = home / ".claude.json"
+    with open(config_path, "w") as f:
+        json.dump(sample_config_data, f)
+
+    # Create manager
+    manager = ClaudeConfigManager()  # Uses default path
+    manager.load_config()
+    return manager

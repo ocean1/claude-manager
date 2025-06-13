@@ -99,9 +99,10 @@ class TestClaudeConfigManager:
 
     def test_clean_old_backups(self, config_manager: ClaudeConfigManager) -> None:
         """Test cleaning old backups."""
-        # Create many backups
+        # Create many backups with proper date formatting
         for i in range(15):
-            backup_path = config_manager.backup_dir / f"claude_2024010{i:02d}_120000.json"
+            # Use proper date formatting: YYYYMMDD
+            backup_path = config_manager.backup_dir / f"claude_202401{i:02d}_120000.json"
             shutil.copy2(config_manager.config_path, backup_path)
 
         # Clean old backups
@@ -111,9 +112,10 @@ class TestClaudeConfigManager:
         backups = list(config_manager.backup_dir.glob("claude_*.json"))
         assert len(backups) == 5
 
-        # Verify the newest ones were kept
+        # Verify the newest ones were kept (14, 13, 12, 11, 10)
         backup_names = [b.name for b in backups]
         assert "claude_20240114_120000.json" in backup_names
+        assert "claude_20240110_120000.json" in backup_names
 
     def test_get_projects(self, config_manager: ClaudeConfigManager) -> None:
         """Test getting projects."""
@@ -179,6 +181,10 @@ class TestClaudeConfigManager:
 
     def test_restore_from_backup(self, config_manager: ClaudeConfigManager) -> None:
         """Test restoring from backup."""
+        # First, verify initial state
+        initial_project_count = len(config_manager.config_data["projects"])
+        assert initial_project_count > 0, "Config should have projects initially"
+
         # Create a backup
         backup_path = config_manager.create_backup()
         assert backup_path is not None
@@ -191,7 +197,7 @@ class TestClaudeConfigManager:
         assert config_manager.restore_from_backup(backup_path) is True
 
         # Verify restoration
-        assert len(config_manager.config_data["projects"]) == 3
+        assert len(config_manager.config_data["projects"]) == initial_project_count
 
     def test_restore_from_nonexistent_backup(
         self, config_manager: ClaudeConfigManager, tmp_path: Path

@@ -42,6 +42,12 @@ class ClaudeConfigManager:
             with open(self.config_path, encoding="utf-8") as f:
                 self.config_data = json.load(f)
 
+            # Validate that config_data is a dictionary
+            if not isinstance(self.config_data, dict):
+                logger.error("Configuration file does not contain a JSON object")
+                self.config_data = {}
+                return False
+
             logger.info(f"Loaded configuration from {self.config_path}")
             return True
 
@@ -96,7 +102,7 @@ class ClaudeConfigManager:
             if not self.config_path.exists():
                 return None
 
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")  # noqa: DTZ005
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")  # noqa: DTZ005
             backup_path = self.backup_dir / f"claude_{timestamp}.json"
 
             shutil.copy2(self.config_path, backup_path)
@@ -208,8 +214,16 @@ class ClaudeConfigManager:
                 logger.error(f"Backup file not found: {backup_path}")
                 return False
 
-            # Create a backup of current config first
-            self.create_backup()
+            # Only create a backup of current config if it exists and is valid
+            if self.config_path.exists():
+                try:
+                    with open(self.config_path, encoding="utf-8") as f:
+                        json.load(f)
+                    # Config is valid, create backup
+                    self.create_backup()
+                except (json.JSONDecodeError, OSError):
+                    # Config is corrupted or unreadable, skip backup
+                    logger.debug("Skipping backup of corrupted config")
 
             # Copy backup to config location
             shutil.copy2(backup_path, self.config_path)
