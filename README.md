@@ -86,18 +86,11 @@ claude-manager --no-backup
 
 ### Setup Development Environment
 
-Using uv (recommended):
 ```bash
 # Clone the repository
 git clone https://github.com/ocean1/claude-manager.git
 cd claude-manager
 
-# Install development dependencies with pre-commit hooks
-uv run python scripts.py install-dev
-```
-
-Or manually:
-```bash
 # Create virtual environment and install dependencies
 uv venv
 uv pip install -e ".[dev]"
@@ -106,36 +99,43 @@ uv pip install -e ".[dev]"
 uv run pre-commit install
 ```
 
-### Development Commands
-
-All development commands are available through the task runner:
+### Running Tests
 
 ```bash
 # Run all tests
-uv run python scripts.py test
+uv run pytest
 
-# Run tests with coverage
-uv run python scripts.py test-cov
+# Run tests with coverage report
+uv run pytest --cov=claude_manager --cov-report=html
 
-# Run tests in watch mode (re-runs on file changes)
-uv run python scripts.py test-watch
+# Run specific test file
+uv run pytest tests/test_models.py
 
-# Run all linters and type checking
-uv run python scripts.py lint
+# Run tests in verbose mode
+uv run pytest -v
+```
 
-# Auto-format code
-uv run python scripts.py format
+### Code Quality & Formatting
 
-# Run specific tools
-uv run python scripts.py ruff        # Run ruff linter
-uv run python scripts.py ruff-fix    # Fix ruff issues
-uv run python scripts.py mypy        # Run type checking
-uv run python scripts.py black       # Run black formatter
-uv run python scripts.py isort       # Run import sorter
+```bash
+# Run all linters
+uv run ruff check src tests
+uv run black --check src tests
+uv run isort --check-only src tests
+uv run mypy src
 
-# Run pre-commit hooks
-uv run python scripts.py pre-commit
+# Auto-fix and format code
+uv run ruff check --fix src tests
+uv run black src tests
+uv run isort src tests
 
+# Run pre-commit hooks on all files
+uv run pre-commit run --all-files
+```
+
+### Building & Distribution
+
+```bash
 # Clean build artifacts
 ./clean.sh
 
@@ -143,25 +143,16 @@ uv run python scripts.py pre-commit
 ./build.sh
 ```
 
-### Available Commands
+### Continuous Integration
 
-| Command | Description |
-|---------|-------------|
-| `install` | Install the package |
-| `install-dev` | Install with development dependencies and pre-commit hooks |
-| `test` | Run all tests |
-| `test-cov` | Run tests with coverage report |
-| `test-watch` | Run tests in watch mode |
-| `lint` | Run all linting checks |
-| `format` | Auto-format code |
-| `ruff` | Run ruff linter |
-| `ruff-fix` | Fix ruff issues automatically |
-| `ruff-format` | Format code with ruff |
-| `mypy` | Run type checking |
-| `black` | Run black formatter |
-| `isort` | Sort imports |
-| `pre-commit` | Run pre-commit hooks |
-| `run` | Run the claude-manager application |
+The project uses GitHub Actions for CI/CD:
+
+- **Linting**: Runs on every push/PR with ruff, black, isort, and mypy
+- **Testing**: Matrix testing across Python 3.8-3.12 on Ubuntu, Windows, and macOS
+- **Coverage**: Automated coverage reporting with Codecov
+- **Pre-commit**: Ensures code quality with automated hooks
+
+All CI configurations are in `.github/workflows/`.
 
 ## Configuration Structure
 
@@ -200,7 +191,9 @@ The tool manages the following aspects of `.claude.json`:
 
 ## Backup Location
 
-Backups are stored in: `~/.claude_backups/claude_YYYYMMDD_HHMMSS.json`
+Backups are stored in: `~/.claude_backups/claude_YYYYMMDD_HHMMSS_ffffff.json`
+
+The filename includes microseconds to prevent collisions when backups are created in rapid succession.
 
 ## Architecture
 

@@ -792,7 +792,12 @@ class BackupManagementScreen(Screen[None]):
             try:
                 from datetime import datetime
 
-                timestamp = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S")  # noqa: DTZ007
+                # Try new format with microseconds first
+                try:
+                    timestamp = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S_%f")  # noqa: DTZ007
+                except ValueError:
+                    # Fall back to old format for existing backups
+                    timestamp = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S")  # noqa: DTZ007
                 date_str = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             except Exception:
                 date_str = timestamp_str

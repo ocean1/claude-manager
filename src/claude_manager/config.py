@@ -239,6 +239,6 @@ class ClaudeConfigManager:
         """Get list of available backup files.
 
         Returns:
-            List of backup file paths sorted by modification time
+            List of backup file paths sorted by modification time (most recent first)
         """
-        return sorted(self.backup_dir.glob("claude_*.json"))
+        return sorted(self.backup_dir.glob("claude_*.json"), reverse=True)

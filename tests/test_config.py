@@ -208,11 +208,22 @@ class TestClaudeConfigManager:
 
     def test_get_backups(self, config_manager: ClaudeConfigManager) -> None:
         """Test getting list of backups."""
-        # Create some backups
+        # Create some backups with small delays to ensure different timestamps
+        import time
+
+        backup_paths = []
         for _i in range(3):
-            config_manager.create_backup()
+            backup_path = config_manager.create_backup()
+            if backup_path:
+                backup_paths.append(backup_path)
+            time.sleep(0.001)  # Small delay to ensure different timestamps
 
         backups = config_manager.get_backups()
         assert len(backups) >= 3
         assert all(b.name.startswith("claude_") for b in backups)
         assert all(b.suffix == ".json" for b in backups)
+
+        # Verify backups are sorted in reverse order (most recent first)
+        if len(backups) >= 2:
+            # Since filenames include timestamps, alphabetical reverse sort should give newest first
+            assert backups[0].name > backups[1].name, "Backups should be sorted most recent first"

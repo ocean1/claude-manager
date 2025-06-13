@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
@@ -19,7 +19,7 @@ class TestIntegration:
     @pytest.fixture
     def full_config_file(self, tmp_path: Path) -> Path:
         """Create a more comprehensive config file for integration testing."""
-        config_data = {
+        config_data: dict[str, Any] = {
             "numStartups": 50,
             "firstStartTime": "2024-01-01T00:00:00.000Z",
             "oauthAccount": {

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from claude_manager.models import Project
 
@@ -102,7 +102,7 @@ class TestProject:
     def test_from_dict_with_missing_fields(self) -> None:
         """Test from_dict with minimal data."""
         # Minimal data - should use defaults
-        data = {}
+        data: dict[str, Any] = {}
         project = Project.from_dict("/minimal/path", data)
 
         assert project.path == "/minimal/path"

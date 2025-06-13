@@ -708,7 +708,12 @@ class ClaudeProjectManagerUI:
 
         for i, backup in enumerate(backup_files, 1):
             timestamp = backup.stem.split("_", 1)[1]
-            date = datetime.strptime(timestamp, "%Y%m%d_%H%M%S").strftime("%Y-%m-%d %H:%M:%S")
+            # Try new format with microseconds first, fall back to old format
+            try:
+                date_obj = datetime.strptime(timestamp, "%Y%m%d_%H%M%S_%f")
+            except ValueError:
+                date_obj = datetime.strptime(timestamp, "%Y%m%d_%H%M%S")
+            date = date_obj.strftime("%Y-%m-%d %H:%M:%S")
             size = f"{backup.stat().st_size / 1024:.1f} KB"
 
             table.add_row(str(i), backup.name, date, size)
