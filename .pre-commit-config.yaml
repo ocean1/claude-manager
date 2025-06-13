@@ -41,5 +41,4 @@ repos:
           - textual
           - questionary
         files: ^src/
-        exclude: ^(src/claude_manager/ui\.py|src/claude_manager/ui_helpers\.py)$
         args: [--strict]

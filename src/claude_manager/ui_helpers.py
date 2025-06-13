@@ -34,7 +34,7 @@ def safe_checkbox(message: str, choices: list[Any], **kwargs: Any) -> list[Any] 
     Returns:
         List of selected choices or None if cancelled with ESC
     """
-    return questionary.checkbox(message, choices=choices, **kwargs).ask()
+    return questionary.checkbox(message, choices=choices, **kwargs).ask()  # type: ignore[no-any-return]
 
 
 def safe_autocomplete(message: str, choices: list[str], **kwargs: Any) -> str | None:
@@ -48,7 +48,7 @@ def safe_autocomplete(message: str, choices: list[str], **kwargs: Any) -> str | 
     Returns:
         Selected choice or None if cancelled with ESC
     """
-    return questionary.autocomplete(message, choices=choices, **kwargs).ask()
+    return questionary.autocomplete(message, choices=choices, **kwargs).ask()  # type: ignore[no-any-return]
 
 
 # Export convenience names

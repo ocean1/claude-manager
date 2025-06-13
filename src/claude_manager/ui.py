@@ -19,7 +19,14 @@ from rich.syntax import Syntax
 from rich.table import Table
 from rich.tree import Tree
 
-from claude_manager.ui_helpers import Confirm, Prompt, safe_autocomplete, safe_checkbox, safe_select
+from claude_manager.ui_helpers import (
+    Confirm,
+    Prompt,
+    safe_autocomplete,
+    safe_checkbox,
+    safe_select,
+    wait_for_enter,
+)
 
 if TYPE_CHECKING:
     from claude_manager.config import ClaudeConfigManager

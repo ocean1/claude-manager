@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import logging
 import sys
-from pathlib import Path
 
 import click
 from rich.console import Console
@@ -37,7 +36,7 @@ def setup_logging(debug: bool = False) -> None:
     "-c",
     "--config",
     "config_path",
-    type=click.Path(exists=False, path_type=Path),  # type: ignore[type-var]
+    type=click.Path(exists=False),
     help="Path to claude.json configuration file (default: ~/.claude.json)",
 )
 @click.option(
@@ -51,7 +50,7 @@ def setup_logging(debug: bool = False) -> None:
     help="Enable debug logging",
 )
 @click.version_option(version=__version__, prog_name="claude-manager")
-def main(config_path: Path | None, no_backup: bool, debug: bool) -> None:  # noqa: ARG001
+def main(config_path: str | None, no_backup: bool, debug: bool) -> None:  # noqa: ARG001
     """Claude Manager - Manage your Claude Code projects and configurations.
 
     This tool provides a terminal UI for managing Claude Code projects stored
@@ -86,7 +85,7 @@ def main(config_path: Path | None, no_backup: bool, debug: bool) -> None:  # noq
     with SignalHandler():
         try:
             # Initialize config manager
-            config_manager = ClaudeConfigManager(str(config_path) if config_path else None)
+            config_manager = ClaudeConfigManager(config_path)
 
             # Load configuration
             if not config_manager.load_config():
