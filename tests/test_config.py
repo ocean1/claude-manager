@@ -6,8 +6,6 @@ import json
 import shutil
 from typing import TYPE_CHECKING
 
-import pytest
-
 from claude_manager.config import ClaudeConfigManager
 from claude_manager.models import Project
 
@@ -197,21 +195,6 @@ class TestClaudeConfigManager:
 
         # Restore from backup
         assert config_manager.restore_from_backup(backup_path) is True
-
-        # Debug: Check if file was copied correctly
-        if len(config_manager.config_data.get("projects", {})) != initial_project_count:
-            # Re-read the file to see what's actually there
-            import json
-
-            with open(config_manager.config_path, encoding="utf-8") as f:
-                actual_data = json.load(f)
-            actual_project_count = len(actual_data.get("projects", {}))
-            config_project_count = len(config_manager.config_data.get("projects", {}))
-            pytest.fail(
-                f"Expected {initial_project_count} projects, "
-                f"but config_data has {config_project_count}, "
-                f"file has {actual_project_count}"
-            )
 
         # Verify restoration
         assert len(config_manager.config_data["projects"]) == initial_project_count

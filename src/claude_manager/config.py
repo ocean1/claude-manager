@@ -214,19 +214,12 @@ class ClaudeConfigManager:
                 logger.error(f"Backup file not found: {backup_path}")
                 return False
 
-            # Only create a backup of current config if it exists and is valid
-            if self.config_path.exists():
-                try:
-                    with open(self.config_path, encoding="utf-8") as f:
-                        json.load(f)
-                    # Config is valid, create backup
-                    self.create_backup()
-                except (json.JSONDecodeError, OSError):
-                    # Config is corrupted or unreadable, skip backup
-                    logger.debug("Skipping backup of corrupted config")
+            # Don't create a backup when restoring - it doesn't make sense to
+            # backup a corrupted/empty state that we're trying to fix
 
             # Copy backup to config location
-            shutil.copy2(backup_path, self.config_path)
+            # Use str() to ensure Windows compatibility
+            shutil.copy2(str(backup_path), str(self.config_path))
 
             # Verify the copy worked
             if not self.config_path.exists():
