@@ -152,9 +152,7 @@ class ProjectListScreen(Screen[None]):
                     project = self.projects[project_path]
                     if project.history_count > 0:
                         self.app.push_screen(
-                            HistoryManagementScreen(
-                                self.config_manager, project, project_path
-                            )
+                            HistoryManagementScreen(self.config_manager, project, project_path)
                         )
                     else:
                         self.notify("No history to clear", severity="warning")
@@ -423,7 +421,10 @@ class MCPServerEditScreen(Screen[None]):
     ]
 
     def __init__(
-        self, parent_screen: MCPServerScreen, server_name: str | None, server_config: dict[str, Any] | None
+        self,
+        parent_screen: MCPServerScreen,
+        server_name: str | None,
+        server_config: dict[str, Any] | None,
     ) -> None:
         super().__init__()
         self.parent_screen = parent_screen
@@ -540,7 +541,9 @@ class AnalyzeProjectsScreen(Screen[None]):
             report.append("")
 
         if unused:
-            report.append(f"[bold yellow]Unused projects (no history) ({len(unused)}):[/bold yellow]")
+            report.append(
+                f"[bold yellow]Unused projects (no history) ({len(unused)}):[/bold yellow]"
+            )
             for path in unused[:10]:
                 report.append(f"  • {path}")
             if len(unused) > 10:
@@ -556,7 +559,9 @@ class AnalyzeProjectsScreen(Screen[None]):
             report.append("")
 
         if no_trust:
-            report.append(f"[bold orange]Projects without trust acceptance ({len(no_trust)}):[/bold orange]")
+            report.append(
+                f"[bold orange]Projects without trust acceptance ({len(no_trust)}):[/bold orange]"
+            )
             for path in no_trust[:10]:
                 report.append(f"  • {path}")
             if len(no_trust) > 10:
@@ -597,7 +602,9 @@ class HistoryManagementScreen(Screen[None]):
         Binding("k", "keep_recent", "Keep Recent"),
     ]
 
-    def __init__(self, config_manager: ClaudeConfigManager, project: Project, project_path: str) -> None:
+    def __init__(
+        self, config_manager: ClaudeConfigManager, project: Project, project_path: str
+    ) -> None:
         super().__init__()
         self.config_manager = config_manager
         self.project = project
@@ -611,7 +618,10 @@ class HistoryManagementScreen(Screen[None]):
             Static(id="history_stats"),
             Static("[bold]Recent History:[/bold]", id="recent_title"),
             Static(id="history_list"),
-            Static("\n[dim]Press 'c' to clear all, 'k' to keep only recent entries[/dim]", id="history_help"),
+            Static(
+                "\n[dim]Press 'c' to clear all, 'k' to keep only recent entries[/dim]",
+                id="history_help",
+            ),
             id="history_container",
         )
         yield Footer()
@@ -667,9 +677,7 @@ class HistoryManagementScreen(Screen[None]):
 
     def action_keep_recent(self) -> None:
         """Show dialog to keep only recent entries."""
-        self.app.push_screen(
-            KeepRecentDialog(self._do_keep_recent)
-        )
+        self.app.push_screen(KeepRecentDialog(self._do_keep_recent))
 
     def _do_keep_recent(self, keep_count: int) -> None:
         """Keep only the specified number of recent entries."""
@@ -783,6 +791,7 @@ class BackupManagementScreen(Screen[None]):
             timestamp_str = backup.stem.split("_", 1)[1]
             try:
                 from datetime import datetime
+
                 timestamp = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S")  # noqa: DTZ007
                 date_str = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             except Exception:

@@ -12,12 +12,10 @@ TASKS = {
         ["pip", "install", "-e", ".[dev]"],
         ["pre-commit", "install"],
     ],
-    
     # Testing
     "test": ["pytest"],
     "test-cov": ["pytest", "--cov=claude_manager", "--cov-report=html", "--cov-report=term"],
     "test-watch": ["pytest-watch"],
-    
     # Linting and formatting
     "lint": [
         ["ruff", "check", "src", "tests"],
@@ -31,20 +29,16 @@ TASKS = {
         ["isort", "src", "tests"],
     ],
     "lint-fix": "format",  # Alias
-    
     # Ruff specific commands
     "ruff": ["ruff", "check", "src", "tests"],
     "ruff-fix": ["ruff", "check", "--fix", "src", "tests"],
     "ruff-format": ["ruff", "format", "src", "tests"],
-    
     # Type checking
     "typecheck": ["mypy", "src"],
     "mypy": "typecheck",  # Alias
-    
     # Pre-commit
     "pre-commit": ["pre-commit", "run", "--all-files"],
     "pc": "pre-commit",  # Alias
-    
     # Running
     "run": ["claude-manager"],
 }
@@ -65,23 +59,23 @@ def run_task(task_name):
         print(f"Unknown task: {task_name}")
         print(f"Available tasks: {', '.join(sorted(TASKS.keys()))}")
         return 1
-    
+
     task = TASKS[task_name]
-    
+
     # Handle aliases
     if isinstance(task, str):
         return run_task(task)
-    
+
     # Handle single command
     if isinstance(task[0], str):
         return run_command(task)
-    
+
     # Handle multiple commands
     for cmd in task:
         ret = run_command(cmd)
         if ret != 0:
             return ret
-    
+
     return 0
 
 
@@ -91,7 +85,7 @@ def main():
         print("Usage: uv run python scripts.py <task>")
         print(f"Available tasks: {', '.join(sorted(TASKS.keys()))}")
         return 1
-    
+
     task_name = sys.argv[1]
     return run_task(task_name)
 
