@@ -207,7 +207,7 @@ Backups are stored in: `~/.claude_backups/claude_YYYYMMDD_HHMMSS.json`
 The codebase is organized into modular components:
 
 - `claude_manager.models`: Data models (Project class)
-- `claude_manager.config`: Configuration file operations  
+- `claude_manager.config`: Configuration file operations
 - `claude_manager.tui`: Terminal UI implementation using Textual
 - `claude_manager.simple_ui`: Fallback UI for environments without Textual support
 - `claude_manager.cli`: Command-line interface

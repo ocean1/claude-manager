@@ -37,7 +37,7 @@ def setup_logging(debug: bool = False) -> None:
     "-c",
     "--config",
     "config_path",
-    type=click.Path(exists=False, path_type=Path),
+    type=click.Path(exists=False, path_type=Path),  # type: ignore[type-var]
     help="Path to claude.json configuration file (default: ~/.claude.json)",
 )
 @click.option(

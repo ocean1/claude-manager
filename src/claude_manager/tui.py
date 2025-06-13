@@ -819,7 +819,7 @@ class BackupManagementScreen(Screen[None]):
         if table.cursor_row is not None:
             rows = list(table.rows)
             if 0 <= table.cursor_row < len(rows):
-                backup_path = Path(rows[table.cursor_row].value)
+                backup_path = Path(str(rows[table.cursor_row].value))
                 self.app.push_screen(
                     ConfirmScreen(
                         f"Restore from backup?\n\n{backup_path.name}\n\nThis will overwrite your current configuration!",
@@ -842,7 +842,7 @@ class BackupManagementScreen(Screen[None]):
         if table.cursor_row is not None:
             rows = list(table.rows)
             if 0 <= table.cursor_row < len(rows):
-                backup_path = Path(rows[table.cursor_row].value)
+                backup_path = Path(str(rows[table.cursor_row].value))
                 self.app.push_screen(
                     ConfirmScreen(
                         f"Delete backup?\n\n{backup_path.name}",

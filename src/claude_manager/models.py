@@ -36,7 +36,7 @@ class Project:
     def last_accessed(self) -> str | None:
         """Returns the last accessed command/display from history."""
         if self.history:
-            return self.history[-1].get("display", "N/A")
+            return str(self.history[-1].get("display", "N/A"))
         return None
 
     @property

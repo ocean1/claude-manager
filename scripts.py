@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3  # noqa: EXE001
 """Task runner script for the project."""
 
 import subprocess
@@ -44,16 +44,16 @@ TASKS = {
 }
 
 
-def run_command(cmd):
+def run_command(cmd: list[str]) -> int:
     """Run a single command."""
     # Prepend 'uv run' to all commands to ensure they run in the virtual environment
-    full_cmd = ["uv", "run"] + cmd
+    full_cmd = ["uv", "run", *cmd]
     print(f"Running: {' '.join(cmd)}")
-    result = subprocess.run(full_cmd, cwd=Path(__file__).parent)
+    result = subprocess.run(full_cmd, cwd=Path(__file__).parent, check=False)
     return result.returncode
 
 
-def run_task(task_name):
+def run_task(task_name: str) -> int:
     """Run a task by name."""
     if task_name not in TASKS:
         print(f"Unknown task: {task_name}")
@@ -79,7 +79,7 @@ def run_task(task_name):
     return 0
 
 
-def main():
+def main() -> int:
     """Main entry point."""
     if len(sys.argv) < 2:
         print("Usage: uv run python scripts.py <task>")

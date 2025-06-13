@@ -208,6 +208,7 @@ ignore = [
 "src/claude_manager/ui.py" = ["RUF001", "DTZ007", "F821", "E501"]
 "src/claude_manager/simple_ui.py" = ["E501"]
 "src/claude_manager/models.py" = ["E501"]
+"scripts.py" = ["T201", "S603"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["claude_manager"]
