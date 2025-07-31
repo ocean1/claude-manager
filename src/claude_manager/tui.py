@@ -235,12 +235,20 @@ class ProjectDetailScreen(Screen[None]):
             history_text = ""
             for entry in self.project.history[-10:]:
                 display = entry.get("display", "")
+                # Clean up any problematic characters
+                # Remove null bytes and other control characters
+                display = "".join(char for char in display if ord(char) >= 32 or char in "\n\t")
+                # Escape special characters first to prevent markup errors
+                display = escape(display)
+                # Replace any remaining problematic sequences
+                display = display.replace("[", "\\[").replace("]", "\\]")
+                # Then truncate if needed
                 if len(display) > 100:
                     display = display[:97] + "..."
-                # Escape special characters to prevent markup errors
-                display = escape(display)
                 history_text += f"• {display}\n"
-            history.update(history_text)
+            # Remove trailing newline to avoid rendering issues
+            # Use plain text mode to avoid any markup interpretation
+            history.update(escape(history_text.rstrip()))
         else:
             history.update("[dim]No history[/dim]")
 
