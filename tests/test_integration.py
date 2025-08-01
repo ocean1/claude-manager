@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from typing import TYPE_CHECKING, Any
 
 import pytest
@@ -136,7 +137,6 @@ class TestIntegration:
 
     def test_backup_rotation(self, config_manager: ClaudeConfigManager) -> None:
         """Test backup rotation functionality."""
-        import time
 
         # Create many backups
         backup_paths = []

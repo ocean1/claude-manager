@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import time
 from typing import TYPE_CHECKING
 
 from claude_manager.config import ClaudeConfigManager
@@ -209,7 +210,6 @@ class TestClaudeConfigManager:
     def test_get_backups(self, config_manager: ClaudeConfigManager) -> None:
         """Test getting list of backups."""
         # Create some backups with small delays to ensure different timestamps
-        import time
 
         backup_paths = []
         for _i in range(3):

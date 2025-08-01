@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable
 
@@ -798,7 +799,6 @@ class BackupManagementScreen(Screen[None]):
             # Parse timestamp from filename
             timestamp_str = backup.stem.split("_", 1)[1]
             try:
-                from datetime import datetime
 
                 # Try new format with microseconds first
                 try:
